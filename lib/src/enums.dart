@@ -33,4 +33,6 @@ enum Gender {
 
   /// A boy, a guy, or a man.
   Male,
+
+  Neutral,
 }
