@@ -33,7 +33,7 @@ abstract interface class TTSVoicesResponse {
   /// The number of [TTSVoice] instances in [voices].
   int get count;
 
-  /// The default voice used by `voice` parameter of [tts].
+  /// The default voice used by `voice` parameter of [Flowery.tts].
   TTSVoice get defaultVoice;
 
   /// A complete list of available voices.
