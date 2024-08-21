@@ -7,6 +7,7 @@ import 'models_abstract.dart';
 @immutable
 final class Voice implements TTSVoice {
   const Voice._({
+    required this.id,
     required this.name,
     required this.gender,
     required this.source,
@@ -17,6 +18,7 @@ final class Voice implements TTSVoice {
   /// Create a new instance of this class from a Map.
   /// {@endtemplate}
   factory Voice.fromMap(final Map<String, dynamic> map) => Voice._(
+        id: map['id'] as String,
         name: map['name'] as String,
         gender: Gender.values.byName(map['gender'] as String),
         source: map['source'] as String,
@@ -24,6 +26,9 @@ final class Voice implements TTSVoice {
           map['language'] as Map<String, dynamic>,
         ),
       );
+
+  @override
+  final int id;
 
   @override
   final String name;
@@ -41,7 +46,7 @@ final class Voice implements TTSVoice {
   /// The hash code for this object.
   /// {@endtemplate}
   @override
-  int get hashCode => Object.hash(name, gender, source, language);
+  int get hashCode => Object.hash(id, name, gender, source, language);
 
   /// Whether this voice's gender is male.
   bool get isMale => gender == Gender.Male;
@@ -49,10 +54,14 @@ final class Voice implements TTSVoice {
   /// Whether this voice's gender is female.
   bool get isFemale => gender == Gender.Female;
 
+  /// Whether this voice's gender is neutral.
+  bool get isNeutral => gender == Gender.Neutral;
+
   /// {@template flowery.toMap}
   /// A map representation of this object.
   /// {@endtemplate}
   Map<String, Object> toMap() => {
+        'id': id,
         'name': name,
         'gender': gender.name,
         'source': source,
@@ -63,7 +72,7 @@ final class Voice implements TTSVoice {
   /// A string representation of this object.
   /// {@endtemplate}
   @override
-  String toString() => 'Voice(name: $name, gender: $gender, '
+  String toString() => 'Voice(id: $id, name: $name, gender: $gender, '
       'source: $source, language: $language)';
 
   /// {@template flowery.equalsOperator}
@@ -73,6 +82,7 @@ final class Voice implements TTSVoice {
   bool operator ==(final Object other) =>
       identical(this, other) ||
       other is Voice &&
+          other.id == id &&
           other.name == name &&
           other.gender == gender &&
           other.source == source &&
@@ -150,9 +160,11 @@ final class VoiceLanguageInfo implements TTSVoiceLanguageInfo {
 final class VoicesResponse implements TTSVoicesResponse {
   const VoicesResponse._({
     required this.count,
+    required this.defaultVoice,
     required this.voices,
     required this.femaleVoices,
     required this.maleVoices,
+    required this.neutralVoices,
     required this.languageCodes,
     required this.languageNames,
     required this.sources,
@@ -161,7 +173,11 @@ final class VoicesResponse implements TTSVoicesResponse {
 
   /// {@macro flowery.fromMap}
   factory VoicesResponse.fromMap(final Map<String, dynamic> map) {
-    final voices = (all: <Voice>[], male: <Voice>[], female: <Voice>[]);
+    final allVoices = <Voice>[];
+    final maleVoices = <Voice>[];
+    final femaleVoices = <Voice>[];
+    final neutralVoices = <Voice>[];
+
     final language = (code: <String>{}, name: <String>{});
     final sources = <String>{};
     final speakers = <String>{};
@@ -170,22 +186,28 @@ final class VoicesResponse implements TTSVoicesResponse {
       final voice = Voice.fromMap(voiceMap as Map<String, dynamic>);
 
       voices.all.add(voice);
-      (voice.isMale ? voices.male : voices.female).add(voice);
+
+      switch (voice.gender) {
+        case Gender.Male: maleVoices.add(voice);
+        case Gender.Female: femaleVoices.add(voice);
+        case Gender.Neutral: neutralVoices.add(voice);
+      }
       language.code.add(voice.language.code);
 
       if (!voice.language.nameWithoutRegion.contains('Unknown')) {
         language.name.add(voice.language.nameWithoutRegion);
       }
-
       sources.add(voice.source);
       speakers.add(voice.name);
     }
 
     return VoicesResponse._(
       count: map['count'] as int,
-      voices: voices.all,
-      femaleVoices: voices.female,
-      maleVoices: voices.male,
+      defaultVoice: Voice.fromMap(map['default'] as Map<String, dynamic>),
+      voices: allVoices,
+      femaleVoices: femaleVoices,
+      maleVoices: maleVoices,
+      neutralVoices: neutralVoices,
       languageCodes: language.code.toList()..sort(),
       languageNames: language.name.toList()..sort(),
       sources: sources.toList()..sort(),
@@ -198,6 +220,9 @@ final class VoicesResponse implements TTSVoicesResponse {
   final int count;
 
   @override
+  final Voice defaultVoice;
+
+  @override
   final List<Voice> voices;
 
   /// A list of female voices.
@@ -205,6 +230,9 @@ final class VoicesResponse implements TTSVoicesResponse {
 
   /// A list of male voices.
   final List<Voice> maleVoices;
+
+  /// A list of neutral voices.
+  final List<Voice> neutralVoices;
 
   /// A list of language codes.
   final List<String> languageCodes;
@@ -219,30 +247,34 @@ final class VoicesResponse implements TTSVoicesResponse {
   final List<String> speakers;
 
   @override
-  int get hashCode => Object.hash(count, Object.hashAll(voices));
+  int get hashCode => Object.hash(count, defaultVoice, Object.hashAll(voices));
 
   /// Find a [Voice] instance having `name` as name.
   ///
   /// The `name` parameter is case-insensitive.
   /// Return the [Voice] instance, if found or otherwise, `null`.
-  @Deprecated('Use get operator instead.')
   Voice? getVoice(final String name) => this[name];
 
   /// {@macro flowery.toMap}
   Map<String, Object> toMap() => {
         'count': count,
+        'default': defaultVoice.toMap(),
         'voices': [for (final voice in voices) voice.toMap()],
       };
 
   /// {@macro flowery.toString}
   @override
-  String toString() => 'VoicesResponse(count: $count, voices: $voices)';
+  String toString() => 'VoicesResponse(count: $count, defaultVoice: $defaultVoice, '
+      'voices: $voices)';
 
   /// {@macro flowery.equalsOperator}
   @override
   bool operator ==(final Object other) =>
       identical(this, other) ||
-      other is VoicesResponse && other.count == count && other.voices == voices;
+      other is VoicesResponse &&
+          other.count == count &&
+          other.defaultVoice = defaultVoice &&
+          other.voices == voices;
 
   /// Find a [Voice] instance having `voiceName` as name.
   ///
