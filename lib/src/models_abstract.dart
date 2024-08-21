@@ -1,7 +1,11 @@
 import 'enums.dart';
+import 'flowery.dart';
 
 /// A model of `TTSVoice` schema.
 abstract interface class TTSVoice {
+  /// The unique identifier of this voice.
+  String get id;
+
   /// The gender of this voice.
   Gender get gender;
 
@@ -28,6 +32,9 @@ abstract interface class TTSVoiceLanguageInfo {
 abstract interface class TTSVoicesResponse {
   /// The number of [TTSVoice] instances in [voices].
   int get count;
+
+  /// The default voice used by `voice` parameter of [tts].
+  TTSVoice get defaultVoice;
 
   /// A complete list of available voices.
   List<TTSVoice> get voices;
