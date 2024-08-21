@@ -28,7 +28,7 @@ final class Voice implements TTSVoice {
       );
 
   @override
-  final int id;
+  final String id;
 
   @override
   final String name;
@@ -185,7 +185,7 @@ final class VoicesResponse implements TTSVoicesResponse {
     for (final voiceMap in map['voices'] as List) {
       final voice = Voice.fromMap(voiceMap as Map<String, dynamic>);
 
-      voices.all.add(voice);
+      allVoices.add(voice);
 
       switch (voice.gender) {
         case Gender.Male: maleVoices.add(voice);
@@ -264,8 +264,8 @@ final class VoicesResponse implements TTSVoicesResponse {
 
   /// {@macro flowery.toString}
   @override
-  String toString() => 'VoicesResponse(count: $count, defaultVoice: $defaultVoice, '
-      'voices: $voices)';
+  String toString() => 'VoicesResponse(count: $count, '
+      'defaultVoices: $defaultVoices, voices: $voices)';
 
   /// {@macro flowery.equalsOperator}
   @override
@@ -273,7 +273,7 @@ final class VoicesResponse implements TTSVoicesResponse {
       identical(this, other) ||
       other is VoicesResponse &&
           other.count == count &&
-          other.defaultVoice = defaultVoice &&
+          other.defaultVoice == defaultVoice &&
           other.voices == voices;
 
   /// Find a [Voice] instance having `voiceName` as name.
