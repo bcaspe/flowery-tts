@@ -77,7 +77,7 @@ class Flowery {
     required final String text,
 
     // Name of the voice speaker.
-    required final String voice,
+    final String? voice,
 
     // Whether to translate the given non-english language text
     // to English. By default, it's false.
@@ -101,7 +101,7 @@ class Flowery {
       );
     }
 
-    if (voice.trimLeft().isEmpty) {
+    if (voice?.trimLeft().isEmpty ?? false) {
       throw const InvalidArgumentsException(
         'Expected a non-empty/non-whitespace string in "voice" parameter.',
       );
@@ -109,7 +109,7 @@ class Flowery {
 
     return _request('tts', {
       'text': text,
-      'voice': voice,
+      if (voice != null) 'voice': voice,
       if (translate != null) 'translate': translate.toString(),
       if (silence != null) 'silence': silence.inMilliseconds.toString(),
       if (audioFormat != null) 'audio_format': audioFormat.name,
