@@ -265,7 +265,7 @@ final class VoicesResponse implements TTSVoicesResponse {
   /// {@macro flowery.toString}
   @override
   String toString() => 'VoicesResponse(count: $count, '
-      'defaultVoices: $defaultVoices, voices: $voices)';
+      'defaultVoice: $defaultVoice, voices: $voices)';
 
   /// {@macro flowery.equalsOperator}
   @override
