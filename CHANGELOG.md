@@ -1,3 +1,14 @@
+## 1.3.0
+
+- Added support for `Neutral` gender.
+- Mark parameter `voice` optional of `Flowery.tts()`.
+- Added support for new fields:
+  - `Voice.id`
+  - `VoicesResponse.defaultVoice`
+- Added `.isNeutral` getter to `Voice`.
+- Added `.neutralVoices` member to `VoicesResponse`.
+- Undeprecated `VoicesResponse.getVoice()`.
+
 ## 1.2.0
 
 - Widen `http` package version support.
