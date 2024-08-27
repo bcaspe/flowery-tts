@@ -14,13 +14,13 @@ class Flowery {
   /// If a [Client] instance is provided in `httpClient` parameter,
   /// do make sure to [close] the client after all requests are done.
   /// Check [Client.close] for more details.
-  const Flowery({final Client? httpClient}) : _httpClient = httpClient;
+  const Flowery({Client? httpClient}) : _httpClient = httpClient;
 
   final Client? _httpClient;
 
   Future<Uint8List> _request(
-    final String path, [
-    final Map<String, String>? queryParams,
+    String path, [
+    Map<String, String>? queryParams,
   ]) async {
     final Response(
       :body,
@@ -74,26 +74,26 @@ class Flowery {
   /// Validation of inputs are handled by the API.
   Future<Uint8List> tts({
     // The text to convert. It has a maximum of 2000 characters length limit.
-    required final String text,
+    required String text,
 
     // Name of the voice speaker.
-    final String? voice,
+    String? voice,
 
     // Whether to translate the given non-english language text
     // to English. By default, it's false.
-    final bool? translate,
+    bool? translate,
 
     // A specific duration of leading & trailing silence sound to wrap
     // to the speech. The duration must not be more than 10 seconds.
     // By default, it's 0.
-    final Duration? silence,
+    Duration? silence,
 
     // The format of audio type to output. By default, it's mp3.
-    final AudioFormat? audioFormat,
+    AudioFormat? audioFormat,
 
     // The speed rate of the speech. Value must be in-between
     // 0.5 to 100. By default, it's 1.0.
-    final double? speed,
+    double? speed,
   }) async {
     if (text.trimLeft().isEmpty) {
       throw const InvalidArgumentsException(
@@ -134,5 +134,5 @@ class Flowery {
   static const apiVersion = '1';
 
   /// The current version of this package.
-  static const version = '1.2.0';
+  static const version = '1.3.0';
 }

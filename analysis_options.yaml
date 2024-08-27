@@ -21,6 +21,7 @@ linter:
     - avoid_equals_and_hash_code_on_mutable_classes
     - avoid_escaping_inner_quotes
     - avoid_field_initializers_in_const_classes
+    - avoid_final_parameters
     - avoid_function_literals_in_foreach_calls
     - avoid_implementing_value_types
     - avoid_init_to_null
@@ -57,7 +58,6 @@ linter:
     - comment_references
     - conditional_uri_does_not_exist
     - control_flow_in_finally
-    - curly_braces_in_flow_control_structures
     - dangling_library_doc_comments
     - depend_on_referenced_packages
     - deprecated_consistency
@@ -80,7 +80,6 @@ linter:
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
     - library_annotations
-    - library_names
     - library_prefixes
     - library_private_types_in_public_api
     - lines_longer_than_80_chars
@@ -104,8 +103,6 @@ linter:
     - only_throw_errors
     - overridden_fields
     - package_api_docs
-    - package_names
-    - package_prefixed_library_names
     - parameter_assignments
     - prefer_adjacent_string_concatenation
     - prefer_asserts_in_initializer_lists
@@ -122,9 +119,7 @@ linter:
     - prefer_final_fields
     - prefer_final_in_for_each
     - prefer_final_locals
-    - prefer_final_parameters
     - prefer_for_elements_to_map_fromIterable
-    - prefer_foreach
     - prefer_function_declarations_over_variables
     - prefer_generic_function_type_aliases
     - prefer_if_elements_to_conditional_expressions
@@ -144,9 +139,7 @@ linter:
     - prefer_single_quotes
     - prefer_spread_collections
     - prefer_typing_uninitialized_variables
-    - prefer_void_to_null
     - provide_deprecation_message
-    - public_member_api_docs
     - recursive_getters
     - require_trailing_commas
     - secure_pubspec_urls

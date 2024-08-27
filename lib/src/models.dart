@@ -17,7 +17,7 @@ final class Voice implements TTSVoice {
   /// {@template flowery.fromMap}
   /// Create a new instance of this class from a Map.
   /// {@endtemplate}
-  factory Voice.fromMap(final Map<String, dynamic> map) => Voice._(
+  factory Voice.fromMap(Map<String, dynamic> map) => Voice._(
         id: map['id'] as String,
         name: map['name'] as String,
         gender: Gender.values.byName(map['gender'] as String),
@@ -79,7 +79,7 @@ final class Voice implements TTSVoice {
   /// The equality operator.
   /// {@endtemplate}
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       other is Voice &&
           other.id == id &&
@@ -100,7 +100,7 @@ final class VoiceLanguageInfo implements TTSVoiceLanguageInfo {
   });
 
   /// {@macro flowery.fromMap}
-  factory VoiceLanguageInfo.fromMap(final Map<String, dynamic> map) {
+  factory VoiceLanguageInfo.fromMap(Map<String, dynamic> map) {
     final name = map['name'] as String;
     final splits = name.split('(');
     final region = switch (splits.length) {
@@ -150,7 +150,7 @@ final class VoiceLanguageInfo implements TTSVoiceLanguageInfo {
 
   /// {@macro flowery.equalsOperator}
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       other is VoiceLanguageInfo && other.name == name && other.code == code;
 }
@@ -172,7 +172,7 @@ final class VoicesResponse implements TTSVoicesResponse {
   });
 
   /// {@macro flowery.fromMap}
-  factory VoicesResponse.fromMap(final Map<String, dynamic> map) {
+  factory VoicesResponse.fromMap(Map<String, dynamic> map) {
     final allVoices = <Voice>[];
     final maleVoices = <Voice>[];
     final femaleVoices = <Voice>[];
@@ -253,7 +253,7 @@ final class VoicesResponse implements TTSVoicesResponse {
   ///
   /// The `name` parameter is case-insensitive.
   /// Return the [Voice] instance, if found or otherwise, `null`.
-  Voice? getVoice(final String name) => this[name];
+  Voice? getVoice(String name) => this[name];
 
   /// {@macro flowery.toMap}
   Map<String, Object> toMap() => {
@@ -269,7 +269,7 @@ final class VoicesResponse implements TTSVoicesResponse {
 
   /// {@macro flowery.equalsOperator}
   @override
-  bool operator ==(final Object other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       other is VoicesResponse &&
           other.count == count &&
@@ -280,7 +280,7 @@ final class VoicesResponse implements TTSVoicesResponse {
   ///
   /// The `voiceName` parameter is case-insensitive.
   /// Return the [Voice] instance, if found or otherwise, `null`.
-  Voice? operator [](final String voiceName) {
+  Voice? operator [](String voiceName) {
     var name = voiceName.trim();
     if (name.isEmpty) return null;
     name = name.toLowerCase();

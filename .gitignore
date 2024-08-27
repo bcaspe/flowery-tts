@@ -1,6 +1,7 @@
 .dart_tool
 pubspec.lock
 doc/api
+
 *.mp3
 *.opus
 *.ogg
