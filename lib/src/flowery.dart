@@ -51,6 +51,8 @@ class Flowery {
           );
         }
 
+        //something here
+
         final error = json['error'] as String;
 
         throw switch (statusCode) {
