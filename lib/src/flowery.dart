@@ -19,51 +19,44 @@ class Flowery {
   final Client? _httpClient;
 
   Future<Uint8List> _request(
-    String path, [
-    Map<String, String>? queryParams,
-  ]) async {
-    final Response(
-      :body,
-      :bodyBytes,
-      :request,
-      :statusCode,
-    ) = await (_httpClient?.get ?? get)(
-      apiUrl.replace(path: 'v$apiVersion/$path', queryParameters: queryParams),
-      headers: {'user-agent': 'flowery_tts/$version'},
-    );
+  String path, [
+  Map<String, String>? queryParams,
+]) async {
+  final response = await (_httpClient?.get ?? get)(
+    apiUrl.replace(path: 'v$apiVersion/$path', queryParameters: queryParams),
+    headers: {'user-agent': 'flowery_tts/$version'},
+  );
 
-    if (statusCode == 200) return bodyBytes;
-    final url = request!.url;
-
-    switch (statusCode) {
-      case 404:
-        throw FloweryException('Invalid route: "$url".');
-      case 405:
-        throw FloweryException('HTTP GET method not allowed on route "$url".');
-      default:
-        late final Map<String, dynamic> json;
-
-        try {
-          json = jsonDecode(body) as Map<String, dynamic>;
-        } on FormatException {
-          throw const FloweryException(
-            'Failed to parse response body as JSON!',
-          );
-        }
-
-        //something here
-
-        final error = json['error'] as String;
-
-        throw switch (statusCode) {
-          400 => InvalidArgumentsException(error),
-          422 => ValidationException(error),
-          500 => FloweryException(error),
-          _ => FloweryException('Unhandled status code: $statusCode.')
-        };
-    }
+  if (response.statusCode == 200) {
+    return response.bodyBytes;
   }
 
+  final url = response.request!.url;
+
+  switch (response.statusCode) {
+    case 404:
+      throw FloweryException('Invalid route: "$url".');
+    case 405:
+      throw FloweryException('HTTP GET method not allowed on route "$url".');
+    default:
+      late final Map<String, dynamic> json;
+      try {
+        json = jsonDecode(response.body) as Map<String, dynamic>;
+      } on FormatException {
+        throw const FloweryException('Failed to parse response body as JSON!');
+      }
+
+      final error = json['error'] as String;
+
+      throw switch (response.statusCode) {
+        400 => InvalidArgumentsException(error),
+        422 => ValidationException(error),
+        429 => FloweryException(error),
+        500 => FloweryException(error),
+        _ => FloweryException('Unhandled status code: ${response.statusCode}.'),
+      };
+  }
+}
   /// Close the underlying API client.
   ///
   /// This method should to be called only when a [Client]
