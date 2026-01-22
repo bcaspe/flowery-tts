@@ -191,6 +191,7 @@ final class VoicesResponse implements TTSVoicesResponse {
         case Gender.Male: maleVoices.add(voice);
         case Gender.Female: femaleVoices.add(voice);
         case Gender.Neutral: neutralVoices.add(voice);
+        case Gender.Other: neutralVoices.add(voice);
       }
       language.code.add(voice.language.code);
 
