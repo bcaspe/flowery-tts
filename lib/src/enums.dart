@@ -36,4 +36,6 @@ enum Gender {
 
   /// A voice that is not specifically [Male] or [Female].
   Neutral,
+
+  Other,
 }
